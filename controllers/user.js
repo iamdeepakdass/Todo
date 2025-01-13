@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 export const register = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
+    console.log(req.body);
     if (!fullName || !email || !password) {
       return res.status(403).json({
         success: false,
@@ -30,6 +31,10 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.log("Registeration Failed", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
 
@@ -49,7 +54,7 @@ export const login = async (req, res) => {
         message: "Invalid Email or Password",
       });
     }
-    const isPasswordMatch = bcrypt.compare(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
       return res.status(403).json({
@@ -60,7 +65,7 @@ export const login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: `Welcome ${user.fullName}`,
+      message: `Welcome back ${user.fullName}`,
     });
   } catch (error) {
     console.log("Login Failed", error);

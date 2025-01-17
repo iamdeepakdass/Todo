@@ -19,12 +19,14 @@ export const register = async (req, res) => {
         message: "This email ID is already registered",
       });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = bcrypt.hashSync(password, 12);
     await User.create({
       fullName,
       email,
       password: hashedPassword,
     });
+    //console.log(hashedPassword);
+
     return res.status(201).json({
       success: true,
       message: "Account created successfully.",

@@ -4,6 +4,8 @@ import connectDB from "./db/database.js";
 import userRouter from "./routes/user.js";
 import bodyParser from "body-parser";
 import todoRouter from "./routes/todo.js";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
@@ -11,6 +13,13 @@ dotenv.config();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(express.raw());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/todo", todoRouter);
